@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ankara Büyükşehir Belediyesi - Akıllı Beyaz Masa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            /* Koyu renk overlay + Arka plan şehir görseli */
+            background: linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.88)), 
+                        url('https://images.unsplash.com/photo-1519501025264-65ba15a82390?q=80&w=1600&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #F8FAFC;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 25px 0;
+        }
+        .dark-card {
+            background-color: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+        }
+        .form-control, .form-select {
+            background-color: rgba(15, 23, 42, 0.8);
+            border: 1px solid #334155;
+            color: #F8FAFC;
+            border-radius: 8px;
+            padding: 12px;
+        }
+        .form-control:focus, .form-select:focus {
+            background-color: rgba(15, 23, 42, 0.95);
+            border-color: #E63946;
+            color: #F8FAFC;
+            box-shadow: 0 0 0 0.25rem rgba(230, 57, 70, 0.25);
+        }
+        .form-control::placeholder {
+            color: #64748B;
+        }
+        .form-label {
+            color: #CBD5E1;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        .btn-ankara {
+            background-color: #E63946;
+            color: white;
+            font-weight: 700;
+            border-radius: 8px;
+            padding: 14px;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease-in-out;
+            border: none;
+        }
+        .btn-ankara:hover {
+            background-color: #9E2A2B;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(230, 57, 70, 0.4);
+        }
+        .header-logo {
+            color: #E63946;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-auto">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-12">
+                <div class="dark-card">
+                    <div class="text-center mb-4">
+                        <h4 class="header-logo mb-1">ANKARA BÜYÜKŞEHİR BELEDİYESİ</h4>
+                        <h5 class="fw-bold text-light">Akıllı Beyaz Masa Portalı</h5>
+                        <p class="text-muted small">Yapay zeka destekli anlık şikayet ve talep bildirim sistemi</p>
+                    </div>
+
+                    {% if mesaj %}
+                    <div class="alert alert-success text-center fw-bold border-0 bg-success text-white mb-4" role="alert">
+                        {{ mesaj }}
+                    </div>
+                    {% endif %}
+
+                    <form action="/talep-gonder" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">Ad Soyad</label>
+                            <input type="text" name="ad_soyad" class="form-control" required placeholder="Ahmet Yılmaz">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Telefon</label>
+                            <input type="text" name="telefon" class="form-control" required placeholder="05XXXXXXXXX">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">İlçe</label>
+                                <select name="ilce" class="form-select" required>
+                                    <option value="Çankaya">Çankaya</option>
+                                    <option value="Keçiören">Keçiören</option>
+                                    <option value="Yenimahalle">Yenimahalle</option>
+                                    <option value="Mamak">Mamak</option>
+                                    <option value="Altındağ">Altındağ</option>
+                                    <option value="Etimesgut">Etimesgut</option>
+                                    <option value="Sincan">Sincan</option>
+                                    <option value="Gölbaşı">Gölbaşı</option>
+                                    <option value="Pursaklar">Pursaklar</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Mahalle</label>
+                                <input type="text" name="mahalle" class="form-control" placeholder="Kızılay Mah.">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Şikayet / Talep Metni</label>
+                            <textarea name="sikayet_metni" class="form-control" rows="4" required placeholder="Şikayetinizi detaylı bir şekilde yazınız..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-ankara w-100 mt-2">BAŞVURUYU GÖNDER</button>
+                    </form>
+                    <div class="text-center mt-4 pt-2 border-top border-secondary">
+                        <a href="/admin" class="text-muted text-decoration-none small hover-light">🔐 Belediye Yetkili Paneline Geçiş (Admin)</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
