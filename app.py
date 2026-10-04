@@ -1,5 +1,6 @@
 import sqlite3
 from datetime import datetime
+import zoneinfo
 from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
@@ -10,7 +11,7 @@ def init_db():
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     
-    # Eski/uyumsuz veritabanı varsa silip baştan temiz tablo oluşturur
+    # Eski/uyumsuz sütun yapısı varsa tabloyu yeniler
     cursor.execute("PRAGMA table_info(talepler)")
     columns = [column[1] for column in cursor.fetchall()]
     
@@ -67,8 +68,12 @@ def talep_gonder():
     mahalle = request.form.get('mahalle')
     sikayet_metni = request.form.get('sikayet_metni')
     
+    # Yapay zeka ile kategori tespiti
     kategori = yapay_zeka_kategorize_et(sikayet_metni)
-    tarih = datetime.now().strftime('%d.%m.%Y %H:%M')
+    
+    # Türkiye saatine (UTC+3) göre anlık saat ve tarih alımı
+    turkiye_saati = zoneinfo.ZoneInfo("Europe/Istanbul")
+    tarih = datetime.now(turkiye_saati).strftime('%d.%m.%Y %H:%M')
     
     conn = sqlite3.connect('ankara_beyaz_masa.db')
     cursor = conn.cursor()
@@ -119,4 +124,3 @@ def admin_sifirla():
 
 if __name__ == '__main__':
     app.run(debug=True)
-    
